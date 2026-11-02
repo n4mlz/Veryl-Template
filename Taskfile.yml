@@ -1,0 +1,48 @@
+version: '3'
+
+vars:
+  SERVICE: toolchain
+
+tasks:
+  setup:
+    desc: Build the Docker development environment
+    cmds:
+      - docker compose build {{.SERVICE}}
+
+  check:
+    desc: Check Veryl sources
+    cmds:
+      - docker compose run --rm {{.SERVICE}} veryl check
+
+  fmt:
+    desc: Format Veryl sources
+    cmds:
+      - docker compose run --rm {{.SERVICE}} veryl fmt
+
+  fmt:check:
+    desc: Check Veryl formatting
+    cmds:
+      - docker compose run --rm {{.SERVICE}} veryl fmt --check
+
+  build:
+    desc: Generate SystemVerilog
+    cmds:
+      - docker compose run --rm {{.SERVICE}} veryl build
+
+  sim:
+    desc: Run native Veryl tests with the built-in simulator
+    cmds:
+      - docker compose run --rm {{.SERVICE}} veryl test
+
+  test:
+    desc: Check sources, generate SystemVerilog, and run native tests
+    cmds:
+      - task: check
+      - task: build
+      - task: sim
+
+  clean:
+    desc: Remove generated files
+    cmds:
+      - docker compose run --rm {{.SERVICE}} veryl clean
+      - docker compose run --rm {{.SERVICE}} sh -lc 'rm -rf .build target'

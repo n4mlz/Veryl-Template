@@ -1,0 +1,9 @@
+services:
+  toolchain:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: veryl-template-toolchain
+    working_dir: /workspace
+    volumes:
+      - .:/workspace

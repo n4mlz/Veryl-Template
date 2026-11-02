@@ -1,0 +1,17 @@
+module Counter (
+    i_clk  : input  clock   ,
+    i_rst  : input  reset   ,
+    o_count: output logic<4>,
+) {
+    var count: logic<4>;
+
+    always_ff {
+        if_reset {
+            count = '0;
+        } else {
+            count = count + 1;
+        }
+    }
+
+    assign o_count = count;
+}

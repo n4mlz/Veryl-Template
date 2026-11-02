@@ -1,0 +1,25 @@
+#[test(counter_counts_and_wraps)]
+module counter_counts_and_wraps {
+    inst clk: $tb::clock_gen;
+    inst rst: $tb::reset_gen ( clk );
+
+    var count: logic<4>;
+
+    inst dut: Counter (
+        i_clk  : clk  ,
+        i_rst  : rst  ,
+        o_count: count,
+    );
+
+    initial {
+        rst.assert();
+        $assert(count == 4'd0, "counter should be zero after reset");
+
+        clk.next(3);
+        $assert(count == 4'd3, "counter should increment on each clock");
+
+        clk.next(13);
+        $assert(count == 4'd0, "four-bit counter should wrap around");
+        $finish();
+    }
+}
